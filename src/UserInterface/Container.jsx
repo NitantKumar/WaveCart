@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 const Container = ({ children, className }) => {
   const newClassName = twMerge(
-    "max-w-screen-xl mx-auto py-10 px-6 md:px-10 lg:px-16",
+    "max-w-screen mx-auto py-10 px-6 md:px-10 lg:px-16",
     className
   );
   return <div className={newClassName}>{children}</div>;

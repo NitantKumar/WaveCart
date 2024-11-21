@@ -1,69 +1,60 @@
 import React from "react";
 import Container from "./Container";
+import { FiTruck, FiShield, FiRefreshCw } from "react-icons/fi";
 
-const FooterTop = () => {
+const Footer = () => {
   const incentives = [
     {
-      name: "Free shipping",
-      imageSrc:
-        "https://tailwindui.com/img/ecommerce/icons/icon-shipping-simple.svg",
-      description:
-        "It's not actually free we just price it into the products. Someone's paying for it, and it's not us.",
+      name: "Fast Shipping",
+      icon: <FiTruck className="h-10 w-10 text-rose-500" />,
+      description: "Get your orders delivered quickly with our priority shipping service.",
     },
     {
-      name: "10-year warranty",
-      imageSrc:
-        "https://tailwindui.com/img/ecommerce/icons/icon-warranty-simple.svg",
-      description:
-        "If it breaks in the first 10 years we'll replace it. After that you're on your own though.",
+      name: "Secure Payments",
+      icon: <FiShield className="h-10 w-10 text-rose-500" />,
+      description: "Shop confidently with encrypted and safe payment options.",
     },
     {
-      name: "Exchanges",
-      imageSrc:
-        "https://tailwindui.com/img/ecommerce/icons/icon-exchange-simple.svg",
-      description:
-        "If you don't like it, trade it to one of your friends for something of theirs. Don't send it here though.",
+      name: "Easy Returns",
+      icon: <FiRefreshCw className="h-10 w-10 text-rose-500" />,
+      description: "Not satisfied? Return within 30 days for a hassle-free process.",
     },
   ];
+
   return (
-    <Container className="py-0">
-      <div className=" rounded-2xl bg-[#f6f6f6] px-6 py-16 sm:p-16">
-        <div className="mx-auto max-w-xl lg:max-w-none">
-          <div className="text-center">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
-              We built our business on customer service
-            </h2>
+    <footer className="bg-gray-900 w-full">
+      <Container className="p-0">
+        <div className="rounded-2xl bg-gray-900 px-6 py-16 sm:p-16">
+          <div className="mx-auto max-w-xl lg:max-w-none">
+            <div className="text-center">
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+                Why Shop With Us?
+              </h2>
+              <p className="mt-4 text-sm text-gray-400">
+                Our commitment to quality and service sets us apart.
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="mx-auto mt-12 grid max-w-sm grid-cols-1 gap-8 sm:max-w-none lg:grid-cols-3">
-          {incentives.map((item) => (
-            <div
-              key={item?.name}
-              className="text-center sm:flex sm:text-left lg:block lg:text-center"
-            >
-              <div className=" sm:flex-shrink-0">
-                <div className="flex-root">
-                  <img
-                    src={item?.imageSrc}
-                    alt="image"
-                    className="mx-auto h-16 w-16"
-                  />
+          <div className="mx-auto mt-12 grid max-w-sm grid-cols-1 gap-8 sm:max-w-none lg:grid-cols-3">
+            {incentives.map((item) => (
+              <div
+                key={item.name}
+                className="text-center sm:flex sm:text-left lg:block lg:text-center"
+              >
+                <div className="sm:flex-shrink-0">
+                  <div className="flex justify-center">{item.icon}</div>
+                </div>
+                <div className="mt-3 sm:ml-6 lg:ml-0">
+                  <h3 className="text-lg font-medium text-white">{item.name}</h3>
+                  <p className="mt-2 text-sm text-gray-400">{item.description}</p>
                 </div>
               </div>
-              <div className="mt-3 sm:ml-6 lg:ml-0">
-                <h3 className="text-base font-medium text-gray-900">
-                  {item?.name}
-                </h3>
-                <p className="mt-2 text-sm text-gray-500">
-                  {item?.description}
-                </p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </footer>
   );
 };
 
-export default FooterTop;
+export default Footer;
