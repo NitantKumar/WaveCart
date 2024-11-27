@@ -13,8 +13,8 @@ import Favorite from "./pages/Favorite.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Orders from "./pages/Orders.jsx";
 import Product from "./pages/Product.jsx";
-import Profile from "./pages/Profile.jsx";
 import Success from "./pages/Success.jsx";
+import Account from "./pages/Account.jsx";
 
 
 const RouterLayout = () => {
@@ -51,8 +51,8 @@ const router = createBrowserRouter([
         element: <Category />,
       },
       {
-        path: "/profile",
-        element: <Profile />,
+        path: "/account",
+        element: <Account/>
       },
       {
         path: "/cart",

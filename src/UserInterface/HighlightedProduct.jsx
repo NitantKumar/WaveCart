@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const HighlightedProduct = ({ product }) => {
   if (!product) {
@@ -18,7 +19,10 @@ const HighlightedProduct = ({ product }) => {
   }
 
   return (
-    <section className="bg-gray-900 text-whiteText p-8 rounded-xl shadow-md">
+    <Link
+      to={`/product/${product.id}`}
+      className="block bg-gray-900 text-whiteText p-8 rounded-xl shadow-md hover:shadow-lg hover:bg-gray-800 transition-all"
+    >
       <div className="flex flex-col md:flex-row items-center gap-6">
         {/* Product Image */}
         <img
@@ -46,23 +50,11 @@ const HighlightedProduct = ({ product }) => {
                 <span key={i} className="text-gray-600 text-sm">★</span>
               ))}
             </div>
-            <p className="text-lightText text-sm">
-              {product.stock} in stock
-            </p>
-          </div>
-
-          {/* Buttons */}
-          <div className="flex gap-4 mt-6">
-            <button className="bg-roseText text-whiteText px-4 py-2 rounded-lg hover:bg-rose-600 transition">
-              Add to Cart
-            </button>
-            <button className="bg-gray-700 text-whiteText px-4 py-2 rounded-lg hover:bg-gray-600 transition">
-              View More
-            </button>
+            <p className="text-lightText text-sm">{product.stock} in stock</p>
           </div>
         </div>
       </div>
-    </section>
+    </Link>
   );
 };
 

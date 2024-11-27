@@ -1,9 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const FeaturedProducts = ({ products }) => {
-  const navigate = useNavigate();
-
   // Select a subset of featured products (e.g., first 6)
   const displayedProducts = products.slice(0, 6);
 
@@ -34,16 +32,19 @@ const FeaturedProducts = ({ products }) => {
             </p>
             <div className="flex gap-2">
               <button
-                onClick={() => navigate(`/product/${product.id}`)}
                 className="bg-roseText text-whiteText py-2 px-4 rounded-lg hover:bg-rose-600 transition"
-              >
-                View Details
-              </button>
-              <button
-                className="bg-gray-700 text-whiteText py-2 px-4 rounded-lg hover:bg-gray-600 transition"
               >
                 Add to Cart
               </button>
+              <Link
+                to={`/product/${product.id}`}
+              >
+                <button
+                  className="bg-gray-700 text-whiteText py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+                >
+                  View Details
+                </button>
+              </Link>
             </div>
           </div>
         ))}

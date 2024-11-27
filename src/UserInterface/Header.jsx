@@ -7,13 +7,15 @@ import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { FiShoppingBag, FiStar, FiUser } from "react-icons/fi";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
 import Container from "./Container";
+import useDebounce from '../hooks/useDebounce.js'
+import { searchProducts } from '../constants/apis.js'
 
 const bottomNavigation = [
   { title: "Home", link: "/" },
   { title: "Shop", link: "/product" },
   { title: "Cart", link: "/cart" },
   { title: "Orders", link: "/orders" },
-  { title: "My Account", link: "/profile" },
+  { title: "My Account", link: "/account" },
   { title: "Blog", link: "/blog" },
 ];
 
@@ -26,8 +28,12 @@ const Header = () => {
   const { data: categories, status } = useSelector((store) => store.categories);
 
   const [searchText, setSearchText] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchDropdown, setShowSearchDropDown] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(defaultCategory);
+
+  const debouncedSearchText = useDebounce(searchText, 1000);
 
   useEffect(() => {
     if (status === "idle") {
@@ -49,8 +55,38 @@ const Header = () => {
     navigate(category.slug ? `/category/${category.slug}` : "/category/all");
   };
 
+  useEffect(() => {
+    (async () => {
+      if (debouncedSearchText) {
+        try {
+          const results = await searchProducts(debouncedSearchText);
+          setSearchResults(results.products || []);
+          setShowSearchDropDown(true);
+        } catch (error) {
+          console.error("Error fetching search results:", error);
+        }
+      } else {
+        setSearchResults([]);
+        setShowSearchDropDown(false);
+      }
+    })();
+  }, [debouncedSearchText]);
+
+  const handleResultClick = (productId) => {
+    setSearchText("");
+    setSearchResults([]);
+    setShowSearchDropDown(false);
+    navigate(`/product/${productId}`);
+  };
+
+  const handleSearchCancel = () => {
+    setSearchText("");
+    setSearchResults([]);
+    setShowSearchDropDown(false);
+  };
+
   return (
-    <header className="w-full bg-darkText text-white">
+    <header className="w-full bg-darkText text-white border-b-2 border-black/10 shadow-sm">
       {/* Top Header */}
       <Container className="h-20 flex items-center justify-between">
         {/* Logo */}
@@ -64,23 +100,42 @@ const Header = () => {
         </Link>
 
         {/* Search Bar */}
-        <div className="relative flex-1 max-w-xl">
-          <input
-            onChange={(e) => setSearchText(e.target.value)}
-            value={searchText}
-            type="text"
-            placeholder="Search Products"
-            className="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-roseText"
+        <div className="relative flex-1 max-w-xl mx-auto mt-4">
+        <input
+          type="text"
+          placeholder="Search Products"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-roseText"
+        />
+        {searchText ? (
+          <IoClose
+            onClick={() => handleSearchCancel()}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xl text-gray-400 hover:text-roseText duration-300 cursor-pointer"
           />
-          {searchText ? (
-            <IoClose
-              onClick={() => setSearchText("")}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xl text-gray-400 hover:text-roseText duration-300 cursor-pointer"
-            />
-          ) : (
-            <IoSearchOutline className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xl text-gray-400" />
-          )}
-        </div>
+        ) : (
+          <IoSearchOutline className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xl text-gray-400" />
+        )}
+
+        {/* Dropdown for search results */}
+        {showSearchDropdown && (
+          <ul className="absolute z-10 top-full left-0 w-full bg-gray-900 text-white rounded-lg shadow-lg max-h-60 overflow-y-auto mt-2">
+            {searchResults.length > 0 ? (
+              searchResults.map((product) => (
+                <li
+                  key={product.id}
+                  onClick={() => handleResultClick(product.id)}
+                  className="p-3 hover:bg-gray-700 cursor-pointer"
+                >
+                  {product.title}
+                </li>
+              ))
+            ) : (
+              <li className="p-3 text-gray-400">No results found</li>
+            )}
+          </ul>
+        )}
+      </div>
 
         {/* Menu Icons */}
         <div className="flex items-center gap-6">
