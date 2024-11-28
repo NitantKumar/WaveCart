@@ -18,15 +18,15 @@ const Orders = () => {
           {orders.map((order, index) => (
             <div
               key={index}
-              className="border border-gray-300 rounded-lg p-4 shadow-sm bg-white"
+              className="border border-gray-300 rounded-lg p-4 shadow-sm bg-gray-900 text-roseText"
             >
               <h2 className="text-xl font-semibold mb-2">
                 Order #{index + 1}
               </h2>
-              <p className="text-gray-700 mb-2">
+              <p className="text-gray-400 mb-2">
                 <span className="font-semibold">Total Amount:</span> ${order.totalAmount.toFixed(2)}
               </p>
-              <p className="text-gray-700">
+              <p className="text-gray-400">
                 <span className="font-semibold">Items:</span>{" "}
                 {order.productTitles.join(", ")}
               </p>

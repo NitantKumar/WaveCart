@@ -101,7 +101,7 @@ const Cart = () => {
             {cartItems.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center border border-gray-300 rounded-lg p-4 shadow-sm bg-white"
+                className="flex items-center border border-gray-300 rounded-lg p-4 shadow-sm bg-gray-900 text-white"
               >
                 {/* Thumbnail */}
                 <img
@@ -122,14 +122,14 @@ const Cart = () => {
                 {/* Quantity Controls */}
                 <div className="flex items-center gap-2">
                   <button
-                    className="px-2 py-1 border rounded bg-gray-200 hover:bg-gray-300 text-gray-800"
+                    className="px-2 py-1 rounded bg-gray-600 hover:bg-gray-700"
                     onClick={() => handleDecreaseItem(item)}
                   >
                     -
                   </button>
                   <span className="px-4">{item.quantity}</span>
                   <button
-                    className="px-2 py-1 border rounded bg-gray-200 hover:bg-gray-300 text-gray-800"
+                    className="px-2 py-1 rounded bg-gray-600 hover:bg-gray-700"
                     onClick={() => handleAddItem(item)}
                   >
                     +
