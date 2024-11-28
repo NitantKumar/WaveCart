@@ -35,6 +35,10 @@ const Header = () => {
 
   const debouncedSearchText = useDebounce(searchText, 1000);
 
+  const cartItems = useSelector((store) => store.cart.items);
+  const cartSize = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const favoriteSize = useSelector((store) => store.favorites.items).length;
+
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchCategoriesThunk());
@@ -139,14 +143,14 @@ const Header = () => {
 
         {/* Menu Icons */}
         <div className="flex items-center gap-6">
-          <Link to={"/profile"}>
+          <Link to={"/account"}>
             <FiUser className="hover:text-roseText duration-300 cursor-pointer" />
           </Link>
           <Link to={"/favorite"}>
             <div className="relative">
               <FiStar className="hover:text-roseText duration-300 cursor-pointer" />
               <span className="absolute -top-1 -right-2 bg-roseText text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                0
+                {favoriteSize}
               </span>
             </div>
           </Link>
@@ -154,7 +158,7 @@ const Header = () => {
             <div className="relative">
               <FiShoppingBag className="hover:text-roseText duration-300 cursor-pointer" />
               <span className="absolute -top-1 -right-2 bg-roseText text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                0
+                {cartSize}
               </span>
             </div>
           </Link>

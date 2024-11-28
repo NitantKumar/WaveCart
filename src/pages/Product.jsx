@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { fetchSingleProduct } from "../constants/apis";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem, decreaseQuantity } from "../store/cartSlice";
+import { add, remove } from "../store/favoriteSlice";
+import { toast } from "react-toastify";
+import { FaStar } from "react-icons/fa";
 
 const Product = () => {
   const { id } = useParams();
@@ -9,6 +14,65 @@ const Product = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 5; // Number of reviews per page
+
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((store) => store.user.isLoggedIn);
+  const cartItems = useSelector((state) => state.cart.items);
+  const favoriteItems = useSelector((state) => state.favorites.items);
+
+  const isFavorite = (id) => favoriteItems.some((item) => item.id === id);
+
+  const handleToggleFavorite = (product) => {
+    if (!isLoggedIn) {
+      toast.error("Please log in to add items to favorites!");
+      return;
+    }
+
+    if (isFavorite(product.id)) {
+      dispatch(remove({ id: product.id }));
+    } else {
+      dispatch(add(product));
+    }
+  };
+
+  const getQuantity = (id) => {
+    const item = cartItems.find((item) => item.id === id);
+    return item ? item.quantity : 0;
+  };
+
+  const quantity = product ? getQuantity(product.id) : 0;
+
+  const handleAddToCart = (product) => {
+    if (!product) {
+      toast.error("Product data is still loading. Please try again!");
+      return;
+    }
+
+    if (!isLoggedIn) {
+      toast.error("Please log in to add items to the cart!");
+    } else if (product.stock <= quantity) {
+      toast.error("Cannot add more than available stock!");
+    } else {
+      dispatch(
+        addItem({
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          stock: product.stock,
+          thumbnail: product.thumbnail,
+          discountPercentage: product.discountPercentage,
+        })
+      );
+    }
+  };
+
+  const handleRemoveFromCart = (product) => {
+    if (!product) {
+      toast.error("Product data is still loading. Please try again!");
+      return;
+    }
+    dispatch(decreaseQuantity({ id: product.id }));
+  };
 
   useEffect(() => {
     if (!id) {
@@ -73,7 +137,19 @@ const Product = () => {
           </div>
         ) : (
           <>
-            <h1 className="text-4xl font-bold text-roseText mb-4">{product.title}</h1>
+            <div className="flex justify-between">
+              <h1 className="text-4xl font-bold text-roseText mb-4">{product.title}</h1>
+              {/* Favorite Button */}
+              <button
+                onClick={() => handleToggleFavorite(product)}
+                className={`text-2xl mb-4 ${isFavorite(product.id)
+                    ? "text-roseText"
+                    : "text-gray-400 hover:text-rose-400"
+                  }`}
+              >
+                <FaStar />
+              </button>
+            </div>
             <p className="text-lightText mb-4">{product.description}</p>
 
             {/* Price, Rating, Stock, Add to Cart */}
@@ -89,9 +165,30 @@ const Product = () => {
               </div>
 
               {/* Right side: Add to Cart button */}
-              <button className="bg-roseText hover:bg-rose-600 text-white font-bold py-2 px-4 rounded">
-                Add to Cart
-              </button>
+              {isLoggedIn && quantity > 0 ? (
+                <div className="flex items-center">
+                  <button
+                    onClick={() => handleRemoveFromCart(product)}
+                    className="bg-gray-700 text-whiteText py-2 px-3 rounded-lg hover:bg-gray-600 transition"
+                  >
+                    -
+                  </button>
+                  <span className="px-2 text-whiteText mx-2">{quantity}</span>
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    className="bg-roseText text-whiteText py-2 px-3 rounded-lg hover:bg-rose-600 transition"
+                  >
+                    +
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className="bg-roseText text-whiteText py-2 px-4 rounded-lg hover:bg-rose-600 transition"
+                >
+                  Add to Cart
+                </button>
+              )}
             </div>
 
             {/* Product Images */}
