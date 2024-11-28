@@ -53,7 +53,6 @@ const Signup = () => {
 
     // Form submission handler
     const onSubmit = async (data) => {
-        console.log(data);
         const { username, email, password } = data;
 
         try {

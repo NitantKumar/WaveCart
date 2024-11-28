@@ -39,7 +39,6 @@ const SignIn = () => {
 
     // Form submission handler
     const onSubmit = async (data) => {
-        console.log(data);
         const { email, password } = data;
 
         try {
