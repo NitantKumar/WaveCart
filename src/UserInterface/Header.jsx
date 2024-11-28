@@ -12,7 +12,7 @@ import { searchProducts } from '../constants/apis.js'
 
 const bottomNavigation = [
   { title: "Home", link: "/" },
-  { title: "Shop", link: "/product" },
+  { title: "Shop", link: "/category/all" },
   { title: "Cart", link: "/cart" },
   { title: "Orders", link: "/orders" },
   { title: "My Account", link: "/account" },
